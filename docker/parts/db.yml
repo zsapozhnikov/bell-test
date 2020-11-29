@@ -1,0 +1,16 @@
+version: '3.4'
+
+volumes:
+    postgres:
+
+services:
+
+    db:
+        image: postgres:12-alpine
+        volumes:
+            - "postgres:/var/lib/postgresql/data"
+
+        environment:
+            POSTGRES_DB: demo
+            POSTGRES_USER: demo
+            POSTGRES_PASSWORD: demo

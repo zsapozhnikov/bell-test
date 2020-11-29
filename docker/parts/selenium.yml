@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+
+    selenium_hub:
+        image: selenium/hub:3.141.59-bismuth
+        environment:
+            - GRID_MAX_SESSION=8
+            - GRID_TIMEOUT=60000
+            - GRID_BROWSER_TIMEOUT=120
+
+    chrome:
+        image: selenium/node-chrome:3.141.59-bismuth
+        shm_size: 2gb
+        environment:
+            - HUB_PORT_4444_TCP_ADDR=selenium_hub
+            - HUB_PORT_4444_TCP_PORT=4444
+
+    nginx:
+        networks:
+            default:
+                aliases:
+                    - "test.crmtest.test"

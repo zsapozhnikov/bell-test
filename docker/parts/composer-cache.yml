@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+    php:
+        environment:
+            COMPOSER_HOME: /tmp/composer
+        volumes:
+            - "$HOME/.composer:/tmp/composer"

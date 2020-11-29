@@ -1,0 +1,13 @@
+[
+    {
+        "version": "7.4.12",
+        "path": "/usr/local",
+        "php_path": "/usr/local/bin/php",
+        "fpm_path": "/usr/local/sbin/php-fpm",
+        "cgi_path": "",
+        "php_config_path": "/usr/local/bin/php-config",
+        "phpize_path": "/usr/local/bin/phpize",
+        "phpdbg_path": "/usr/local/bin/phpdbg",
+        "is_system": true
+    }
+]

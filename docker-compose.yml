@@ -1,0 +1,41 @@
+version: '3.4'
+
+volumes:
+    redis:
+
+services:
+
+    nginx:
+        build: ./docker/services/nginx
+        volumes:
+            - "./:/var/www/crm/:ro"
+
+        labels:
+            traefik.enable: 'true'
+            traefik.http.routers.demo.entrypoints: web
+            traefik.http.routers.demo.rule: 'HostRegexp(`{subdomain:.+}.demo.{[^.]+}`) || HostRegexp(`{subdomain:.+}.crmtest.{[^.]+}`)'
+            traefik.http.routers.demo.priority: 1
+            traefik.http.routers.demo.service: demo
+            traefik.http.services.demo.loadbalancer.server.port: '80'
+
+    php: &php-basic
+        build: ./docker/services/php
+        env_file: .env
+        environment: &php-env
+            APP_CRM: ${APP_CRM:-demo}
+            APP_ENV: ${APP_ENV:-cache}
+            APP_DEBUG: ${APP_DEBUG:-0}
+            HOST_PROJECT_DIR: $PWD
+            COMPOSER_HOME: /tmp/composer
+            HOME: /var/www/crm
+        tmpfs:
+            - /tmp
+        volumes:
+            - "./:/var/www/crm/"
+
+    php-debug:
+        <<: *php-basic
+        environment:
+            <<: *php-env
+            PHP_INI_SCAN_DIR: "/usr/local/etc/php/debug_conf.d"
+

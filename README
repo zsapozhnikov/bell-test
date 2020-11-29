@@ -1,0 +1,61 @@
+При реализации некоторые моменты были изменены:
+1. Загрузка 10К записей в фикстуры не имеет практического смысла, сейчас работает 20 записей
+2. При реализации API для выбора локали обычно используют заголовки. Смысл в том, что при его отсутствии мы шлём дефолтную локаль. А если язык будет в роуте, то у нас либо будет 2 роута (с префиксом и без), либо локаль будет обязательной. Здесь я реализовал через заголовок, так как в api_platform с этим работает
+3. Имя автора я бы выводил атомарно, а клиент уже сам решит, хочет он склеивать Имя и Фамилию или нет. Но тут вывожу как в ТЗ
+
+TODO:
+1. Тесты нужны не только unit, но и функциональные
+2. Доставать дефолтную локаль из параметров
+3. Оптимизация локализованных Entity в DataProvider, чтобы сократить кол-во запросов
+4. Валидаторы на InputDto
+5. В DataTransformer использовать мэпперы
+6. Проставить типы для свойств класса(доступно с 7.4)
+7. Добавить линтеры, PHPStan
+
+
+1. Запуск проекта `make start`
+2. Загрузка фикстур `make db-fill`
+3. Запуск тестов `make test-unit`
+
+Примеры:
+
+Создание автора
+`curl -X POST "http://bell.demo.test/api/authors" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"firstName\":\"Author First\",\"lastName\":\"Author Last\"}"`
+```
+{
+  "id": {id},
+  "name": "Author First Author Last"
+}
+```
+
+Поиск
+`curl -X GET "http://bell.demo.test/api/books/search?query=Book 0" -H  "accept: application/json"`
+
+```
+[
+  {
+    "id": 61,
+    "name": "Book 0"
+  }
+]
+```
+
+Локализация
+`curl -X GET "http://bell.demo.test/api/books/{id}" -H  "accept: application/json" -H  "X-Lang: ru"`
+
+```
+{
+  "id": {id},
+  "name": "Книга {index}"
+}
+```
+
+
+`curl -X GET "http://bell.demo.test/api/books/{id}" -H  "accept: application/json" -H  "X-Lang: en"`
+
+```
+{
+  "id": {id},
+  "name": "Book {index}"
+}
+```
